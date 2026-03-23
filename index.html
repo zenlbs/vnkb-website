@@ -8,6 +8,7 @@
   <meta property="og:description" content="just a working keyboard">
   <meta property="og:type" content="website">
   <title>VNKB</title>
+  <meta name="theme-color" content="#ffffff">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -73,6 +74,12 @@
       50% { opacity: 0; }
     }
 
+    @media (prefers-reduced-motion: reduce) {
+      .tagline .cursor {
+        animation: none;
+      }
+    }
+
     .download {
       display: inline-flex;
       align-items: center;
@@ -132,9 +139,9 @@
   <main class="page">
     <p class="mark">VNKB</p>
 
-    <h1 class="tagline" id="tagline"></h1>
+    <h1 class="tagline" id="tagline">just a working keyboard</h1>
 
-    <a class="download" href="https://github.com/zenlbs/vnkb/releases/download/v1.0.2/VNKB.dmg" style="visibility: hidden;" id="download-btn">
+    <a class="download" href="https://github.com/zenlbs/vnkb/releases/latest/download/VNKB.dmg" download="VNKB.dmg" style="visibility: hidden;" id="download-btn">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path d="M7 1v8M4 6.5l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
@@ -146,21 +153,28 @@
         var text = 'just a working keyboard';
         var el = document.getElementById('tagline');
         var btn = document.getElementById('download-btn');
+        el.textContent = '';
         var span = document.createElement('span');
         var cursor = document.createElement('span');
         cursor.className = 'cursor';
         el.appendChild(span);
         el.appendChild(cursor);
-        var i = 0;
-        var timer = setInterval(function() {
-          i++;
-          span.textContent = text.slice(0, i);
-          if (i >= text.length) {
-            clearInterval(timer);
-            setTimeout(function() { cursor.remove(); }, 800);
-            btn.style.visibility = 'visible';
-          }
-        }, 60);
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          span.textContent = text;
+          cursor.remove();
+          btn.style.visibility = 'visible';
+        } else {
+          var i = 0;
+          var timer = setInterval(function() {
+            i++;
+            span.textContent = text.slice(0, i);
+            if (i >= text.length) {
+              clearInterval(timer);
+              setTimeout(function() { cursor.remove(); }, 800);
+              btn.style.visibility = 'visible';
+            }
+          }, 60);
+        }
       })();
     </script>
   </main>
